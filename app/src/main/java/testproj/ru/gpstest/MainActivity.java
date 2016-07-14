@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements
         updateValuesFromBundle(savedInstanceState);
     }
 
+
     protected void onStart() {
         mGoogleApiClient.connect();
         super.onStart();
