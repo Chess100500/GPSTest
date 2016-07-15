@@ -1,8 +1,11 @@
 package testproj.ru.gpstest;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -33,8 +36,9 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class MainActivity extends Activity implements
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,
+AddGeofenceDialog.AddGeofenceDialogListener {
     public GoogleApiClient mGoogleApiClient;
     private TextView latText;
     private TextView longText;
@@ -197,6 +201,21 @@ public class MainActivity extends AppCompatActivity implements
         builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
         builder.addGeofences(mGeofenceList);
         return builder.build();
+    }
+
+    public void addGeofence(View view) {
+        DialogFragment dialog = new AddGeofenceDialog();
+        dialog.show(getFragmentManager(), "AddGeofenceDialog");
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        dialog.getDialog().cancel();
     }
 /*
     private PendingIntent getGeofencePendingIntent() {
