@@ -53,6 +53,7 @@ AddGeofenceDialog.AddGeofenceDialogListener {
     private final long GEOFENCE_RADIUS_IN_METERS = 100;
     private List<Geofence> mGeofenceList;
     private PendingIntent mGeofencePendingIntent;
+    private String geoFenceName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +104,6 @@ AddGeofenceDialog.AddGeofenceDialogListener {
 
     }
 
-
     @Override
     public void onLocationChanged(Location location) {
         mCurrentLocation = location;
@@ -149,19 +149,11 @@ AddGeofenceDialog.AddGeofenceDialogListener {
     }
 
     public void getLocation(View view) {
-
-
         if (ContextCompat.checkSelfPermission(MainActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             startLocationUpdates();
         }
     }
-/*
-    public void addGeofence(View view) {
-        mGeofenceList.add(new Geofence.Builder()
-                .setRequestId(entry.getKey()))
-    }
-*/
 
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY, mRequestingLocationUpdates);
@@ -196,14 +188,27 @@ AddGeofenceDialog.AddGeofenceDialogListener {
         return builder.build();
     }
 
-    public void addGeofence(View view) {
+    public void openAddGeofenceDialog(View view) {
         DialogFragment dialog = new AddGeofenceDialog();
         dialog.show(getFragmentManager(), "AddGeofenceDialog");
     }
 
+    private void addGeofence(String geoFenceName) {
+        mGeofenceList.add(new Geofence.Builder()
+                .setRequestId(geoFenceName)
+                .setCircularRegion(mCurrentLocation.getLongitude(),
+                        mCurrentLocation.getLongitude(),
+                        GEOFENCE_RADIUS_IN_METERS)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .build());
+    }
+
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
-
+        EditText geoFenceNameField = (EditText) dialog.getDialog().findViewById(R.id.geoFenceName);
+        String geoFenceName = geoFenceNameField.getText().toString();
+        addGeofence(geoFenceName);
+        Toast.makeText(MainActivity.this, "Точка успешно добавлена", Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:text="add Geofence"
         android:id="@+id/addGeofence"
-        android:onClick="addGeofence"
+        android:onClick="openAddGeofenceDialog"
         android:layout_below="@+id/button"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="39dp" />
