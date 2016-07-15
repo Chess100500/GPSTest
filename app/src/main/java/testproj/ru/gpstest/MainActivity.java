@@ -163,13 +163,6 @@ AddGeofenceDialog.AddGeofenceDialogListener {
     }
 */
 
-/*
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getCallingActivity());
-        LayoutInflater inflater = getCallingActivity().getLayoutInflater
-    }
-*/
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY, mRequestingLocationUpdates);
         savedInstanceState.putParcelable(LOCATION_KEY, mCurrentLocation);

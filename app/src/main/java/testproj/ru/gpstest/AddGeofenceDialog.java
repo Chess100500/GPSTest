@@ -26,6 +26,7 @@ public class AddGeofenceDialog extends DialogFragment {
 
         builder.setView(inflater.inflate(R.layout.dialog_makegeofence, null))
         .setTitle("Введите название точки")
+                /*
         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -37,7 +38,7 @@ public class AddGeofenceDialog extends DialogFragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 mListener.onDialogNegativeClick(AddGeofenceDialog.this);
             }
-        });
+        })*/;
         return builder.create();
     }
 
