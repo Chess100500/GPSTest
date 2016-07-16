@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,6 +27,8 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Result;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
@@ -33,18 +36,19 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends Activity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,
-AddGeofenceDialog.AddGeofenceDialogListener {
+        AddGeofenceDialog.AddGeofenceDialogListener, ResultCallback {
     public GoogleApiClient mGoogleApiClient;
     private TextView latText;
     private TextView longText;
     private TextView timeText;
     private LocationRequest mLocationRequest;
-    private  Location mCurrentLocation;
+    private Location mCurrentLocation;
     private String mLastUpdateTime;
     private Boolean mRequestingLocationUpdates;
     private final String REQUESTING_LOCATION_UPDATES_KEY = "RequestingLocationUpdates";
@@ -61,8 +65,9 @@ AddGeofenceDialog.AddGeofenceDialogListener {
         setContentView(R.layout.activity_main);
 
         latText = (TextView) findViewById(R.id.latText);
-        longText = (TextView)  findViewById(R.id.longText);
+        longText = (TextView) findViewById(R.id.longText);
         timeText = (TextView) findViewById(R.id.timeText);
+        mGeofenceList = new ArrayList<>();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -94,7 +99,7 @@ AddGeofenceDialog.AddGeofenceDialogListener {
     @Override
     public void onResume() {
         super.onResume();
-        if(mGoogleApiClient.isConnected() && !mRequestingLocationUpdates) {
+        if (mGoogleApiClient.isConnected() && !mRequestingLocationUpdates) {
             startLocationUpdates();
         }
     }
@@ -163,17 +168,17 @@ AddGeofenceDialog.AddGeofenceDialogListener {
     }
 
     private void updateValuesFromBundle(Bundle savedInstanceState) {
-        if (savedInstanceState!=null) {
-            if(savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
+        if (savedInstanceState != null) {
+            if (savedInstanceState.keySet().contains(REQUESTING_LOCATION_UPDATES_KEY)) {
                 mRequestingLocationUpdates = savedInstanceState.getBoolean(
                         REQUESTING_LOCATION_UPDATES_KEY);
             }
 
-            if(savedInstanceState.keySet().contains(LOCATION_KEY)) {
+            if (savedInstanceState.keySet().contains(LOCATION_KEY)) {
                 mCurrentLocation = savedInstanceState.getParcelable(LOCATION_KEY);
             }
 
-            if(savedInstanceState.keySet().contains(LAST_UPDATED_TIME_STRING_KEY)) {
+            if (savedInstanceState.keySet().contains(LAST_UPDATED_TIME_STRING_KEY)) {
                 mLastUpdateTime = savedInstanceState.getString(
                         LAST_UPDATED_TIME_STRING_KEY);
             }
@@ -183,9 +188,18 @@ AddGeofenceDialog.AddGeofenceDialogListener {
 
     private GeofencingRequest getGeofenceRequest() {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL);
         builder.addGeofences(mGeofenceList);
         return builder.build();
+    }
+
+    private PendingIntent getGeofencePendingIntent() {
+        if (mGeofencePendingIntent != null) {
+            return mGeofencePendingIntent;
+        }
+
+        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
+        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     public void openAddGeofenceDialog(View view) {
@@ -200,6 +214,8 @@ AddGeofenceDialog.AddGeofenceDialogListener {
                         mCurrentLocation.getLongitude(),
                         GEOFENCE_RADIUS_IN_METERS)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL)
+                .setLoiteringDelay(5000)
                 .build());
     }
 
@@ -215,15 +231,23 @@ AddGeofenceDialog.AddGeofenceDialogListener {
     public void onDialogNegativeClick(DialogFragment dialog) {
         dialog.getDialog().cancel();
     }
-/*
-    private PendingIntent getGeofencePendingIntent() {
-        if (mGeofencePendingIntent != null) {
-            return mGeofencePendingIntent;
+
+    @Override
+    public void onResult(@NonNull Result result) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
         }
-
-        Intent intent = new Intent(this, GeofenceTransitionService.class);
-        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        LocationServices.GeofencingApi.addGeofences(
+                mGoogleApiClient,
+                getGeofenceRequest(),
+                getGeofencePendingIntent()
+        ).setResultCallback(this);
     }
-
-*/
 }

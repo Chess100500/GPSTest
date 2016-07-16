@@ -52,4 +52,15 @@ public class AddGeofenceDialog extends DialogFragment {
             + "must implement AddGeofenceDialogListener");
         }
     }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try{
+            mListener = (AddGeofenceDialogListener) activity;
+        }catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + "must implement AddGeofenceDialogListener");
+        }
+    }
 }
