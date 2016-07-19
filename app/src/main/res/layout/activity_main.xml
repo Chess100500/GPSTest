@@ -99,8 +99,9 @@
         android:text="Get Location"
         android:id="@+id/button"
         android:onClick="getLocation"
-        android:layout_above="@+id/addGeofence"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/currentGeofence"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="36dp" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -109,7 +110,16 @@
         android:text="add Geofence"
         android:id="@+id/addGeofence"
         android:onClick="openAddGeofenceDialog"
+        android:layout_below="@+id/button"
+        android:layout_alignLeft="@+id/button"
+        android:layout_alignStart="@+id/button" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="remove Geofence"
+        android:id="@+id/removeGeofence"
+        android:onClick="removeGeofenceButtonHandler"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/button"
-        android:layout_alignEnd="@+id/button" />
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

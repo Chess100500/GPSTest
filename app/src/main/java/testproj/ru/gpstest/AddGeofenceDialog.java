@@ -53,6 +53,7 @@ public class AddGeofenceDialog extends DialogFragment {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
