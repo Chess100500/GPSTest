@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -21,6 +22,7 @@ import java.util.List;
 public class GeofenceTransitionsIntentService extends IntentService {
 
     protected static final String TAG = "GeofenceTransitionsIS";
+    private String geofenceName;
 
     public GeofenceTransitionsIntentService() {
         super(TAG);
@@ -50,6 +52,8 @@ public class GeofenceTransitionsIntentService extends IntentService {
                     geofenceTransition,
                     triggeringGeofences
             );
+
+            geofenceName = geofenceTransitionDetails;
 
             sendNotification(geofenceTransitionDetails);
             Log.i(TAG, geofenceTransitionDetails);
@@ -102,6 +106,14 @@ public class GeofenceTransitionsIntentService extends IntentService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         mNotificationManager.notify(0, builder.build());
+
+        Intent intent = new Intent("send-geofence-name");
+        intent.putExtra("geofenceName", notificationDetails);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    public String getGeofenceName() {
+        return geofenceName==null ? "Не определена" : geofenceName;
     }
 
     private String getTransitionString(int transitionType) {

@@ -111,8 +111,7 @@
         android:id="@+id/addGeofence"
         android:onClick="openAddGeofenceDialog"
         android:layout_below="@+id/button"
-        android:layout_alignLeft="@+id/button"
-        android:layout_alignStart="@+id/button" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -120,6 +119,28 @@
         android:text="remove Geofence"
         android:id="@+id/removeGeofence"
         android:onClick="removeGeofenceButtonHandler"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/addGeofence"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fake GPS"
+        android:id="@+id/fakeGPS"
+        android:layout_below="@+id/currentGeofence"
+        android:layout_toLeftOf="@+id/button"
+        android:layout_toStartOf="@+id/button"
+        android:onClick="setFakeLocation"/>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="realGPS"
+        android:id="@+id/realGPS"
+        android:layout_below="@+id/currentGeofence"
+        android:layout_toRightOf="@+id/button"
+        android:layout_toEndOf="@+id/button"
+        android:onClick="setRealLocation"/>
 </RelativeLayout>

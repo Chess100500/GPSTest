@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/geoFenceName"
         android:hint="Введите название точки"
+        android:inputType="textNoSuggestions"
         android:gravity="center"/>
 
 </LinearLayout>
