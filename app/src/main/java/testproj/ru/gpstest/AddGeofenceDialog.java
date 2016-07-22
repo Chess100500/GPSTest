@@ -13,8 +13,8 @@ import android.view.LayoutInflater;
 public class AddGeofenceDialog extends DialogFragment {
 
     public interface AddGeofenceDialogListener {
-        public void onDialogPositiveClick(DialogFragment dialog);
-        public void onDialogNegativeClick(DialogFragment dialog);
+        void onDialogPositiveClick(DialogFragment dialog);
+        void onDialogNegativeClick(DialogFragment dialog);
     }
 
     AddGeofenceDialogListener mListener;

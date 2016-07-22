@@ -260,7 +260,7 @@ public class MainActivity extends Activity implements
 
     private GeofencingRequest getGeofenceRequest() {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL);
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
         builder.addGeofences(mGeofenceList);
         return builder.build();
     }
@@ -271,9 +271,8 @@ public class MainActivity extends Activity implements
         }
 
         Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
-        mGeofencePendingIntent = PendingIntent.getService(
+        return PendingIntent.getService(
                 this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        return mGeofencePendingIntent;
     }
 
     public void openAddGeofenceDialog(View view) {
@@ -288,7 +287,8 @@ public class MainActivity extends Activity implements
                         mCurrentLocation.getLongitude(),
                         Constants.GEOFENCE_RADIUS_IN_METERS)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                        Geofence.GEOFENCE_TRANSITION_EXIT)
                 .setLoiteringDelay(5000)
                 .build());
 
@@ -322,6 +322,7 @@ public class MainActivity extends Activity implements
 
     @Override
     public void onDialogNegativeClick(DialogFragment dialog) {
+
         dialog.getDialog().cancel();
     }
 

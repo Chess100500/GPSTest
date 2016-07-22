@@ -143,4 +143,5 @@
         android:layout_toRightOf="@+id/button"
         android:layout_toEndOf="@+id/button"
         android:onClick="setRealLocation"/>
+
 </RelativeLayout>

@@ -22,12 +22,12 @@ import java.util.List;
 public class GeofenceTransitionsIntentService extends IntentService {
 
     protected static final String TAG = "GeofenceTransitionsIS";
-    private String geofenceName;
 
     public GeofenceTransitionsIntentService() {
         super(TAG);
     }
 
+    @Override
     public void onCreate() {
         super.onCreate();
     }
@@ -44,7 +44,8 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_DWELL) {
+        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
+                geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
 
             String geofenceTransitionDetails = getGeofenceTransitionDetails(
@@ -52,8 +53,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
                     geofenceTransition,
                     triggeringGeofences
             );
-
-            geofenceName = geofenceTransitionDetails;
 
             sendNotification(geofenceTransitionDetails);
             Log.i(TAG, geofenceTransitionDetails);
@@ -112,9 +111,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
-    public String getGeofenceName() {
-        return geofenceName==null ? "Не определена" : geofenceName;
-    }
+
 
     private String getTransitionString(int transitionType) {
         switch (transitionType) {

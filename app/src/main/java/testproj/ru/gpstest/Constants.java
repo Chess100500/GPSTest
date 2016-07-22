@@ -12,7 +12,7 @@ public final class Constants {
 
     public static final String GEOFENCES_ADDED_KEY = PACKAGE_NAME + ".GEOFENCES_ADDED_KEY";
 
-    public static final long GEOFENCE_RADIUS_IN_METERS = 150;
+    public static final long GEOFENCE_RADIUS_IN_METERS = 30;
 
     public static final String REQUESTING_LOCATION_UPDATES_KEY = "RequestingLocationUpdates";
     public static final String LOCATION_KEY = "CurrentLocation";
