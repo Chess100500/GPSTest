@@ -3,15 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="testproj.ru.gpstest">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
+        android:debuggable="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:debuggable="true"
         android:theme="@style/AppTheme"
         tools:ignore="HardcodedDebugMode">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,7 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".GeofenceTransitionsIntentService"/>
+
+        <service android:name=".GeofenceTransitionsIS" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB05T8NXlH6UsmUsUjyps72aJLGJPaChi0" />
     </application>
 
 </manifest>

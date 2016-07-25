@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
@@ -19,11 +20,11 @@ import com.google.android.gms.location.GeofencingEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GeofenceTransitionsIntentService extends IntentService {
+public class GeofenceTransitionsIS extends IntentService {
 
     protected static final String TAG = "GeofenceTransitionsIS";
 
-    public GeofenceTransitionsIntentService() {
+    public GeofenceTransitionsIS() {
         super(TAG);
     }
 
@@ -33,7 +34,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
+        protected void onHandleIntent(Intent intent) {
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         if (geofencingEvent.hasError()) {
             String errorMessage = GeofenceErrorMessages.getErrorString(this,
@@ -105,10 +106,10 @@ public class GeofenceTransitionsIntentService extends IntentService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         mNotificationManager.notify(0, builder.build());
-
+/*
         Intent intent = new Intent("send-geofence-name");
         intent.putExtra("geofenceName", notificationDetails);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);*/
     }
 
 
